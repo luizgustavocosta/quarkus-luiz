@@ -4,8 +4,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import io.smallrye.mutiny.subscription.BackPressureFailure;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
  * The original code is available on https://quarkus.io/blog/mutiny-back-pressure/
  */
 @DisplayName("Flow control and Back-pressure")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BackPressureTest implements WithAssertions {
 
     private static final int MILLIS = 10, START_INCLUSIVE = 0, END_EXCLUSIVE = 10;
@@ -34,6 +34,7 @@ class BackPressureTest implements WithAssertions {
      * Cant consume events.
      */
     @Test
+    @Order(1)
     @DisplayName("MissingBackPressureFailure")
     void cantConsumeEvents() {
         final Multi<Object> streaming = createItemUsingTheInterval(MILLIS)
@@ -56,6 +57,7 @@ class BackPressureTest implements WithAssertions {
      * Buffering items.
      */
     @Test
+    @Order(2)
     @DisplayName("Buffering items")
     void bufferingItems() {
         int bufferSize = 250;
@@ -81,6 +83,7 @@ class BackPressureTest implements WithAssertions {
      * Dropping not consumed items.
      */
     @Test
+    @Order(3)
     @DisplayName("Dropping items")
     void droppingNotConsumedItems() {
         final Multi<Number> overflowItems = createItemUsingTheInterval(MILLIS)
@@ -104,6 +107,7 @@ class BackPressureTest implements WithAssertions {
      * Consume all events.
      */
     @Test
+    @Order(4)
     @DisplayName("Handle back-pressure, first approach")
     void consumeAllEvents() {
         final Multi<Integer> backPressureApproach = createItemsByRange(START_INCLUSIVE, END_EXCLUSIVE)
@@ -124,6 +128,7 @@ class BackPressureTest implements WithAssertions {
      * Handle back pressure second approach.
      */
     @Test
+    @Order(5)
     @DisplayName("Handle back-pressure, second approach")
     void handleBackPressureSecondApproach() {
         // https://github.com/ReactiveX/RxJava/issues/5022
@@ -162,6 +167,7 @@ class BackPressureTest implements WithAssertions {
      * When receive a stream create your own subscriber.
      */
     @Test
+    @Order(6)
     @DisplayName("Chuck Norris mode a.k.a. Coding your own subscriber")
     void whenReceiveAStreamCreateYourOwnSubscriber() {
         final Multi<Number> chuckNorris = createItemsByRange(START_INCLUSIVE, END_EXCLUSIVE)
