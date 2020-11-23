@@ -1,2 +1,2 @@
 # quarkus-luiz
-Quarkus project
+Quarkus project based on quarkus.io
